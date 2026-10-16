@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f26/team01-f26-05
 owner: ucsb-cs156-f26
 repo_name: team01-f26-05
-pull_requests: [{"author":{"id":"U_kgDOCCbFVA","is_bot":false,"login":"tara-rezaei","name":""},"headRefName":"Tara-RecommendationRequest-create-db","number":43,"title":"Tara - RecommendationRequest create db table","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/43"}]
+pull_requests: [{"author":{"id":"U_kgDOCCbFVA","is_bot":false,"login":"tara-rezaei","name":""},"headRefName":"Tara-RecommendationRequest-get-post","number":44,"title":"Tara Create RecommendationRequestController, add GET (index) and POST (create)  ","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/44"},{"author":{"id":"U_kgDOCCbFVA","is_bot":false,"login":"tara-rezaei","name":""},"headRefName":"Tara-RecommendationRequest-create-db","number":43,"title":"Tara - RecommendationRequest create db table","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/43"}]
