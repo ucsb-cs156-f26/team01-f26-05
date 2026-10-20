@@ -88,7 +88,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .orgCode("TENNIS")
             .orgTranslationShort("TENNIS CLUB")
             .orgTranslation("UCSB TENNIS CLUB")
-            .inactive(false)
+            .inactive(true)
             .build();
 
     UCSBOrganization chinese =
@@ -126,7 +126,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .orgCode("TENNIS")
             .orgTranslationShort("TENNIS CLUB")
             .orgTranslation("UCSB TENNIS CLUB")
-            .inactive(false)
+            .inactive(true)
             .build();
 
     when(ucsbOrganizationRepository.save(eq(tennis))).thenReturn(tennis);
@@ -139,7 +139,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
                     .param("orgCode", "TENNIS")
                     .param("orgTranslationShort", "TENNIS CLUB")
                     .param("orgTranslation", "UCSB TENNIS CLUB")
-                    .param("inactive", "false")
+                    .param("inactive", "true")
                     .with(csrf()))
             .andExpect(status().isOk())
             .andReturn();
