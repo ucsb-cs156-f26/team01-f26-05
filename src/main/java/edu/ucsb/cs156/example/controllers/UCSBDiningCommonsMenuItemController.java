@@ -5,6 +5,8 @@ import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -120,7 +122,20 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
       @Parameter(name = "id", description = "id of the menu item to update", example = "1")
           @RequestParam
           Long id,
-      @RequestBody @Valid UCSBDiningCommonsMenuItem incoming) {
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description =
+                  "new values for diningCommonsCode, name and station (the id is not changed)",
+              required = true,
+              content =
+                  @Content(
+                      mediaType = "application/json",
+                      examples =
+                          @ExampleObject(
+                              value =
+                                  "{\"diningCommonsCode\": \"carrillo\", \"name\": \"Chicken Caesar Salad\", \"station\": \"Grill\"}")))
+          @RequestBody
+          @Valid
+          UCSBDiningCommonsMenuItem incoming) {
 
     UCSBDiningCommonsMenuItem item =
         ucsbDiningCommonsMenuItemRepository
