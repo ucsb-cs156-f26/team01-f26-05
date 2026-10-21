@@ -5,12 +5,17 @@ import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,6 +102,51 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
         ucsbDiningCommonsMenuItemRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
+
+    return item;
+  }
+
+  /**
+   * Update a single dining commons menu item
+   *
+   * @param id the id of the menu item to update
+   * @param incoming the new values, as a JSON request body containing diningCommonsCode, name and
+   *     station (e.g. {"diningCommonsCode": "ortega", "name": "Baked Pesto Pasta with Chicken",
+   *     "station": "Entree Specials"})
+   * @return the updated UCSBDiningCommonsMenuItem
+   */
+  @Operation(summary = "Update a single UCSB dining commons menu item")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PutMapping("")
+  public UCSBDiningCommonsMenuItem updateUCSBDiningCommonsMenuItem(
+      @Parameter(name = "id", description = "id of the menu item to update", example = "1")
+          @RequestParam
+          Long id,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description =
+                  "new values for diningCommonsCode, name and station (the id is not changed)",
+              required = true,
+              content =
+                  @Content(
+                      mediaType = "application/json",
+                      examples =
+                          @ExampleObject(
+                              value =
+                                  "{\"diningCommonsCode\": \"carrillo\", \"name\": \"Chicken Caesar Salad\", \"station\": \"Grill\"}")))
+          @RequestBody
+          @Valid
+          UCSBDiningCommonsMenuItem incoming) {
+
+    UCSBDiningCommonsMenuItem item =
+        ucsbDiningCommonsMenuItemRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
+
+    item.setDiningCommonsCode(incoming.getDiningCommonsCode());
+    item.setName(incoming.getName());
+    item.setStation(incoming.getStation());
+
+    ucsbDiningCommonsMenuItemRepository.save(item);
 
     return item;
   }
