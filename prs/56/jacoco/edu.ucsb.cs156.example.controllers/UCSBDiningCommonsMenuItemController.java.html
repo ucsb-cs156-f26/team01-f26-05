@@ -5,6 +5,8 @@ import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = &quot;UCSBDiningCommonsMenuItem&quot;)
 @RequestMapping(&quot;/api/ucsbdiningcommonsmenuitem&quot;)
 @RestController
-<span class="fc" id="L25">@Slf4j</span>
-<span class="fc" id="L26">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
+<span class="fc" id="L27">@Slf4j</span>
+<span class="fc" id="L28">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
 
   @Autowired UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
@@ -36,8 +38,8 @@ import org.springframework.web.bind.annotation.RestController;
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;/all&quot;)
   public Iterable&lt;UCSBDiningCommonsMenuItem&gt; allUCSBDiningCommonsMenuItems() {
-<span class="fc" id="L39">    Iterable&lt;UCSBDiningCommonsMenuItem&gt; items = ucsbDiningCommonsMenuItemRepository.findAll();</span>
-<span class="fc" id="L40">    return items;</span>
+<span class="fc" id="L41">    Iterable&lt;UCSBDiningCommonsMenuItem&gt; items = ucsbDiningCommonsMenuItemRepository.findAll();</span>
+<span class="fc" id="L42">    return items;</span>
   }
 
   /**
@@ -73,14 +75,14 @@ import org.springframework.web.bind.annotation.RestController;
           @RequestParam
           String station) {
 
-<span class="fc" id="L76">    UCSBDiningCommonsMenuItem item = new UCSBDiningCommonsMenuItem();</span>
-<span class="fc" id="L77">    item.setDiningCommonsCode(diningCommonsCode);</span>
-<span class="fc" id="L78">    item.setName(name);</span>
-<span class="fc" id="L79">    item.setStation(station);</span>
+<span class="fc" id="L78">    UCSBDiningCommonsMenuItem item = new UCSBDiningCommonsMenuItem();</span>
+<span class="fc" id="L79">    item.setDiningCommonsCode(diningCommonsCode);</span>
+<span class="fc" id="L80">    item.setName(name);</span>
+<span class="fc" id="L81">    item.setStation(station);</span>
 
-<span class="fc" id="L81">    UCSBDiningCommonsMenuItem savedItem = ucsbDiningCommonsMenuItemRepository.save(item);</span>
+<span class="fc" id="L83">    UCSBDiningCommonsMenuItem savedItem = ucsbDiningCommonsMenuItemRepository.save(item);</span>
 
-<span class="fc" id="L83">    return savedItem;</span>
+<span class="fc" id="L85">    return savedItem;</span>
   }
 
   /**
@@ -96,12 +98,12 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;id&quot;, description = &quot;id of the menu item to retrieve&quot;, example = &quot;1&quot;)
           @RequestParam
           Long id) {
-<span class="fc" id="L99">    UCSBDiningCommonsMenuItem item =</span>
+<span class="fc" id="L101">    UCSBDiningCommonsMenuItem item =</span>
         ucsbDiningCommonsMenuItemRepository
-<span class="fc" id="L101">            .findById(id)</span>
-<span class="fc" id="L102">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+<span class="fc" id="L103">            .findById(id)</span>
+<span class="fc" id="L104">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
 
-<span class="fc" id="L104">    return item;</span>
+<span class="fc" id="L106">    return item;</span>
   }
 
   /**
@@ -120,20 +122,33 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;id&quot;, description = &quot;id of the menu item to update&quot;, example = &quot;1&quot;)
           @RequestParam
           Long id,
-      @RequestBody @Valid UCSBDiningCommonsMenuItem incoming) {
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description =
+                  &quot;new values for diningCommonsCode, name and station (the id is not changed)&quot;,
+              required = true,
+              content =
+                  @Content(
+                      mediaType = &quot;application/json&quot;,
+                      examples =
+                          @ExampleObject(
+                              value =
+                                  &quot;{\&quot;diningCommonsCode\&quot;: \&quot;carrillo\&quot;, \&quot;name\&quot;: \&quot;Chicken Caesar Salad\&quot;, \&quot;station\&quot;: \&quot;Grill\&quot;}&quot;)))
+          @RequestBody
+          @Valid
+          UCSBDiningCommonsMenuItem incoming) {
 
-<span class="fc" id="L125">    UCSBDiningCommonsMenuItem item =</span>
+<span class="fc" id="L140">    UCSBDiningCommonsMenuItem item =</span>
         ucsbDiningCommonsMenuItemRepository
-<span class="fc" id="L127">            .findById(id)</span>
-<span class="fc" id="L128">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+<span class="fc" id="L142">            .findById(id)</span>
+<span class="fc" id="L143">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
 
-<span class="fc" id="L130">    item.setDiningCommonsCode(incoming.getDiningCommonsCode());</span>
-<span class="fc" id="L131">    item.setName(incoming.getName());</span>
-<span class="fc" id="L132">    item.setStation(incoming.getStation());</span>
+<span class="fc" id="L145">    item.setDiningCommonsCode(incoming.getDiningCommonsCode());</span>
+<span class="fc" id="L146">    item.setName(incoming.getName());</span>
+<span class="fc" id="L147">    item.setStation(incoming.getStation());</span>
 
-<span class="fc" id="L134">    ucsbDiningCommonsMenuItemRepository.save(item);</span>
+<span class="fc" id="L149">    ucsbDiningCommonsMenuItemRepository.save(item);</span>
 
-<span class="fc" id="L136">    return item;</span>
+<span class="fc" id="L151">    return item;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
