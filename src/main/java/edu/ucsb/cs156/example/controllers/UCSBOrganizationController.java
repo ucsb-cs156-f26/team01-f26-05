@@ -1,15 +1,20 @@
 package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.UCSBOrganization;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,19 +41,33 @@ public class UCSBOrganizationController extends ApiController {
     return organizations;
   }
 
-  //   /**
-  //    * This method creates a new diningcommons. Accessible only to users with the role
-  // "ROLE_ADMIN".
-  //    *
-  //    * @param code code of the diningcommons
-  //    * @param name name of the diningcommons
-  //    * @param hasSackMeal whether or not the commons has sack meals
-  //    * @param hasTakeOutMeal whether or not the commons has take out meals
-  //    * @param hasDiningCam whether or not the commons has a dining cam
-  //    * @param latitude latitude of the commons
-  //    * @param longitude logitude of the commons
-  //    * @return the save diningcommons
-  //    */
+  /**
+   * This method returns a single ucsborgs.
+   *
+   * @param orgCode code of the ucsborgs
+   * @return a single org
+   */
+  @Operation(summary = "Get a single organization")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public UCSBOrganization getById(@Parameter(name = "orgCode") @RequestParam String orgCode) {
+    UCSBOrganization organization =
+        ucsbOrganizationRepository
+            .findById(orgCode)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+
+    return organization;
+  }
+
+  /**
+   * This method creates a new organization. Accessible only to users with the role "ROLE_ADMIN".
+   *
+   * @param orgCode code of the organization
+   * @param orgTranslationShort short translation of the organization name
+   * @param orgTranslation full translation of the organization name
+   * @param inactive whether or not the organization is inactive
+   * @return the saved organization
+   */
   @Operation(summary = "Create a new organization")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
@@ -66,5 +85,52 @@ public class UCSBOrganizationController extends ApiController {
 
     UCSBOrganization savedOrganizations = ucsbOrganizationRepository.save(organization);
     return savedOrganizations;
+  }
+
+  /**
+   * Update a single organization. Accessible only to users with the role "ROLE_ADMIN".
+   *
+   * @param orgCode code of the organization
+   * @param incoming the new organization contents
+   * @return the updated organization object
+   */
+  @Operation(summary = "Update a single organization")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PutMapping("")
+  public UCSBOrganization updateOrganization(
+      @Parameter(name = "orgCode") @RequestParam String orgCode,
+      @RequestBody @Valid UCSBOrganization incoming) {
+
+    UCSBOrganization organization =
+        ucsbOrganizationRepository
+            .findById(orgCode)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+
+    organization.setOrgTranslationShort(incoming.getOrgTranslationShort());
+    organization.setOrgTranslation(incoming.getOrgTranslation());
+    organization.setInactive(incoming.getInactive());
+
+    ucsbOrganizationRepository.save(organization);
+
+    return organization;
+  }
+
+  /**
+   * Delete an organization. Accessible only to users with the role "ROLE_ADMIN".
+   *
+   * @param orgCode code of the organization
+   * @return a message indicating the organization was deleted
+   */
+  @Operation(summary = "Delete a UCSBOrganization")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @DeleteMapping("")
+  public Object deleteOrganization(@Parameter(name = "orgCode") @RequestParam String orgCode) {
+    UCSBOrganization organization =
+        ucsbOrganizationRepository
+            .findById(orgCode)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+
+    ucsbOrganizationRepository.delete(organization);
+    return genericMessage("UCSBOrganization with id %s deleted".formatted(orgCode));
   }
 }
