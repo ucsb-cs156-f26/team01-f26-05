@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-f26/team01-f26-05
 owner: ucsb-cs156-f26
 repo_name: team01-f26-05
-pull_requests: [{"author":{"id":"U_kgDOEjc3tA","is_bot":false,"login":"jstp06","name":""},"headRefName":"jstp06-delete-for-menuitemreview-table","number":50,"title":"jp -  Add DELETE endpoint for a specific record in MenuItemReview table","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/50"}]
+pull_requests: [{"author":{"id":"MDQ6VXNlcjc5MTg1MTI1","is_bot":false,"login":"N-Nicholls","name":"Noah Nicholls"},"headRefName":"n-nicholls-articles-put","number":79,"title":"Noah - Add PUT endpoint for a single record in Articles table #41","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/79"},{"author":{"id":"U_kgDOEjc3tA","is_bot":false,"login":"jstp06","name":""},"headRefName":"jstp06-delete-for-menuitemreview-table","number":50,"title":"jp -  Add DELETE endpoint for a specific record in MenuItemReview table","url":"https://github.com/ucsb-cs156-f26/team01-f26-05/pull/50"}]
