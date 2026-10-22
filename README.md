@@ -1,7 +1,5 @@
 # team01-f26-05
 
-TODO: Add a link to the deployed Dokku app for your team here, e.g.
-
 Deployments:
 
 * Prod: <https://team01.dokku-05.cs.ucsb.edu>
